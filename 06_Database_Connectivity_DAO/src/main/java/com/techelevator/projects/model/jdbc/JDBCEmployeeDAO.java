@@ -102,15 +102,5 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 		return employee;
 		
 	}
-	
-	private long getNextDepartmentId() {
-		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('seq_department_id')");
-
-		if (nextIdResult.next()) {
-			return nextIdResult.getLong(1);
-		} else {
-			throw new RuntimeException("Something went wrong while getting an id for the new department");
-		}
-	}
 
 }
