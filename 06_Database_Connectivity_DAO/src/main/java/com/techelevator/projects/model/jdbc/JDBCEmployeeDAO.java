@@ -64,7 +64,7 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 	public List<Employee> getEmployeesWithoutProjects() {
 	List<Employee> employees = new ArrayList<>();
 		
-		String emp =  "SELECT * FROM employee LEFT JOIN project_employee ON employee.employee_id = project_employee.employee_id WHERE project_employee.employee_id IS NULL ";
+		String emp =  "SELECT employee.employee_id, employee.department_id, employee.first_name, employee.last_name, employee.birth_date, employee.gender, employee.hire_date FROM employee LEFT JOIN project_employee ON employee.employee_id = project_employee.employee_id WHERE project_id IS NULL ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(emp);
 		
 		while(results.next()) {
@@ -76,8 +76,8 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 	@Override
 	public List<Employee> getEmployeesByProjectId(Long projectId) {
 	List<Employee> employees = new ArrayList<>();
-		
-		String emp =  "SELECT * FROM employee JOIN project_employee ON employee.employee_id = project_employee.employee_id WHERE project_employee.employee_id = ?";
+
+    	String emp =  "SELECT employee.employee_id, employee.department_id, employee.first_name, employee.last_name, employee.birth_date, employee.gender, employee.hire_date FROM employee LEFT JOIN project_employee ON employee.employee_id = project_employee.employee_id WHERE project_id = ?";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(emp, projectId);
 		
 		while(results.next()) {
