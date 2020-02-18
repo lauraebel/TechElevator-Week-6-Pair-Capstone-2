@@ -1,5 +1,6 @@
 package com.techelevator.projects.model.jdbc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class JDBCProjectDAO implements ProjectDAO {
 	public List<Project> getAllActiveProjects() {
 		List<Project> projects = new ArrayList<>();
 		
-		String proj = "SELECT project_id, name, from_date, to_date FROM project";
+		String proj = "SELECT project_id, name, from_date, to_date FROM project WHERE (from_date IS NOT NULL) AND (to_date >= CURRENT_TIMESTAMP OR to_date IS NULL) ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(proj);
 		
 		while(results.next()) {
@@ -50,9 +51,18 @@ public class JDBCProjectDAO implements ProjectDAO {
 		
 		project.setId(results.getLong("project_id"));
 		project.setName(results.getString("name"));
-
-		return project;
 		
+		if (project.getStartDate() != null) {
+			project.setStartDate(LocalDate.parse(results.getString("from_date")));  
+		} else {
+			project.setStartDate(null);
+		}
+		if (project.getEndDate() != null) {
+			project.setEndDate(LocalDate.parse(results.getString("to_date")));
+		} else {
+			project.setEndDate(null);
+		}
+		return project;
 	}
 
 }
