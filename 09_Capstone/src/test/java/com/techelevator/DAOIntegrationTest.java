@@ -24,7 +24,7 @@ public abstract class DAOIntegrationTest {
 	@BeforeClass
 	public static void setupDataSource() {
 		dataSource = new SingleConnectionDataSource();
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/excelsior-venues");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/Excelsior-Venues");
 		dataSource.setUsername("postgres");
 		dataSource.setPassword("postgres1");
 		/*
