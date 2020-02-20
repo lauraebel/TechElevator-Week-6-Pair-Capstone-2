@@ -8,11 +8,11 @@ public interface VenueDAO {
 	
 	public List<Venue> getAllVenues();
 	
-	public List<Venue> findVenueById(long id);
+	public Venue findVenueById(long id);
 	
-	public List<Venue> findVenueByName(String name);
+	public Venue findVenueByName(String name);
 	
-	public List<Venue> findVenueByCityId(long cityId);
+	public Venue findVenueByCityId(long cityId);
 	
 	public void update(Venue venue);
 	

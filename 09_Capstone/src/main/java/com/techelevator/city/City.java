@@ -4,7 +4,7 @@ public class City {
 	
 	private long cityId;
 	private String cityName;
-	private String cityAbbreviation;
+	private String stateAbbreviation;
 	
 	public long getCityId() {
 		return cityId;
@@ -18,11 +18,11 @@ public class City {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
-	public String getCityAbbreviation() {
-		return cityAbbreviation;
+	public String getStateAbbreviation() {
+		return stateAbbreviation;
 	}
-	public void setCityAbbreviation(String cityAbbreviation) {
-		this.cityAbbreviation = cityAbbreviation;
+	public void setStateAbbreviation(String stateAbbreviation) {
+		this.stateAbbreviation = stateAbbreviation;
 	}
 	
 

@@ -2,7 +2,17 @@ package com.techelevator.space;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
 public class JDBCSpaceDAO implements SpaceDAO{
+	
+	private final JdbcTemplate jdbcTemplate;
+	
+	public JDBCSpaceDAO(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
 
 	@Override
 	public void save(Space newSpace) {

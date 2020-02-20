@@ -2,7 +2,17 @@ package com.techelevator.state;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
 public class JDBCStateDAO implements StateDAO {
+	
+	private final JdbcTemplate jdbcTemplate;
+	
+	public JDBCStateDAO(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
 
 	@Override
 	public void save(State newState) {

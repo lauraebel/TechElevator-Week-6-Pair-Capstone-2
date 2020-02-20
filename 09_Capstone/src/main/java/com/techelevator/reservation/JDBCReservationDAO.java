@@ -2,7 +2,17 @@ package com.techelevator.reservation;
 
 import java.time.LocalDate;
 
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
 public class JDBCReservationDAO implements ReservationDAO {
+	
+	private final JdbcTemplate jdbcTemplate;
+	
+	public JDBCReservationDAO(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
 
 	@Override
 	public void save(Reservation newReservation) {

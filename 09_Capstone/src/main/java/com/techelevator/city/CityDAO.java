@@ -4,15 +4,13 @@ import java.util.List;
 
 public interface CityDAO {
 	
+	List<City> getAllCities();
+	
 	public void save(City newCity);
-	
-	public List<City> getAllCities();
-	
-	public List<City> findCityById(long id);
-	
-	public List<City> findCityByName(String name);
-	
-	public List<City> findCityByAbbreviation(String abbreviation);
+		
+	public City findCityById(long id);
+		
+	public List<City> findCityByStateAbbreviation(String stateAbbreviation);
 	
 	public void update(City city);
 	

@@ -2,7 +2,17 @@ package com.techelevator.category;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
 public class JDBCCategoryDAO implements CategoryDAO {
+	
+	private final JdbcTemplate jdbcTemplate;
+	
+	public JDBCCategoryDAO(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
 
 	@Override
 	public void save(Category newCategory) {

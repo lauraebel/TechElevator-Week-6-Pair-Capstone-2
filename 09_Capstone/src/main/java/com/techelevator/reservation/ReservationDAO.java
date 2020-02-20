@@ -1,8 +1,11 @@
 package com.techelevator.reservation;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ReservationDAO {
+	
+	List<Reservation> getAllReservations();
 
 	public void save(Reservation newReservation);
 	
