@@ -32,10 +32,9 @@ public class JDBCCityDAO implements CityDAO {
 
 	@Override
 	public void save(City newCity) {
-		String sqlInsertCity = "INSERT INTO city(id, name, state_abbreviation) VALUES(?, ?, ?)";
-
+		String sqlInsertCity = "INSERT INTO city(id, name, state_abbreviation) "
+				+ "VALUES(?, ?, ?) ";
 		newCity.setCityId(getNextCityId());
-
 		jdbcTemplate.update(sqlInsertCity, newCity.getCityId(), newCity.getCityName(), newCity.getStateAbbreviation());
 	}
 

@@ -1,14 +1,14 @@
 package com.techelevator.reservation;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Reservation {
 	
 	private long reservationId;
 	private long spaceId;
 	private int numberOfAttendees;
-	private LocalDate startDate;
-	private LocalDate endDate;
+	private Date startDate;
+	private Date endDate;
 	private String reservedFor;
 	
 	public long getReservationId() {
@@ -29,16 +29,16 @@ public class Reservation {
 	public void setNumberOfAttendees(int numberOfAttendees) {
 		this.numberOfAttendees = numberOfAttendees;
 	}
-	public LocalDate getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	public LocalDate getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 	public String getReservedFor() {
