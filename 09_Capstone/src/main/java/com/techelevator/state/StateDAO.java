@@ -7,9 +7,7 @@ public interface StateDAO {
 	public void save(State newState);
 	
 	public List<State> getAllStates();
-	
-	public List<State> findStateByName(String name);
-	
+		
 	public List<State> findStateByAbbreviation(String abbreviation);
 	
 	public void update(State state);
