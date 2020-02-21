@@ -1,14 +1,9 @@
 package com.techelevator.city;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-
-import com.techelevator.venue.Venue;
 
 public class JDBCCityDAO implements CityDAO {
 
@@ -19,29 +14,17 @@ public class JDBCCityDAO implements CityDAO {
 	}
 
 	@Override
-	public List<City> getAllCities() {
-		List<City> cities = new ArrayList<City>();
-		String selectAllCities = "SELECT id, name, state_abbreviation FROM city";
-		SqlRowSet rows = jdbcTemplate.queryForRowSet(selectAllCities);
-
-		while (rows.next()) {
-			cities.add(mapRowToCity(rows));
-		}
-		return cities;
-	}
-
-	@Override
 	public void save(City newCity) {
 		String sqlInsertCity = "INSERT INTO city(id, name, state_abbreviation) "
 				+ "VALUES(?, ?, ?) ";
 		newCity.setCityId(getNextCityId());
-		jdbcTemplate.update(sqlInsertCity, newCity.getCityId(), newCity.getCityName(), newCity.getStateAbbreviation());
+		jdbcTemplate.update(sqlInsertCity, newCity.getCityId(), newCity.getCityName(), newCity.getStateAbbreviation());	
 	}
 
 	@Override
 	public void update(City city) {
 		String sql = "UPDATE city SET name = ?, state_abbreviation = ? WHERE id = ? ";
-		jdbcTemplate.update(sql, city.getCityName(), city.getStateAbbreviation());
+		jdbcTemplate.update(sql, city.getCityName(), city.getStateAbbreviation(), city.getCityId());
 	}
 
 	@Override
@@ -60,18 +43,14 @@ public class JDBCCityDAO implements CityDAO {
 		}
 		return selectedCity;
 	}
-
-	@Override
-	public List<City> findCityByStateAbbreviation(String stateAbbreviation) {
-		List<City> cities = new ArrayList<>();
-		String sqlFindCityByStateAbbreviation = "SELECT id, name, state_abbreviation " + "FROM city "
-				+ "WHERE state_abbreviation = ? ";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlFindCityByStateAbbreviation, stateAbbreviation);
-		if (results.next()) {
-			City selectedCity = mapRowToCity(results);
-			cities.add(selectedCity);
+	
+	private long getNextCityId() {
+		SqlRowSet nextResResult = jdbcTemplate.queryForRowSet("SELECT nextval('city_id_seq')");
+		if (nextResResult.next()) {
+			return nextResResult.getLong(1);
+		} else {
+			throw new RuntimeException("Something went wrong while getting an id for the new reservation");
 		}
-		return cities;
 	}
 
 	private City mapRowToCity(SqlRowSet result) {
@@ -80,16 +59,6 @@ public class JDBCCityDAO implements CityDAO {
 		selectedCity.setCityName(result.getString("name"));
 		selectedCity.setStateAbbreviation(result.getString("state_abbreviation"));
 		return selectedCity;
-	}
-
-	private long getNextCityId() {
-		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('seq_city_id')");
-
-		if (nextIdResult.next()) {
-			return nextIdResult.getLong(1);
-		} else {
-			throw new RuntimeException("Something went wrong while getting an id for the new city");
-		}
 	}
 
 }
