@@ -65,9 +65,9 @@ public class JDBCVenueDAOIntegrationTest {
 	 * This method provides access to the DataSource for subclasses so that they can
 	 * instantiate a DAO for testing
 	 */
-	protected DataSource getDataSource() {
-		return dataSource;
-	}
+//	protected DataSource getDataSource() {
+//		return dataSource;
+//	}
 	
 	@Before
 	public void setup() {

@@ -18,15 +18,16 @@ public class JDBCCategoryDAO implements CategoryDAO {
 
 	@Override
 	public void save(Category newCategory) {
-		String sql = "INSERT INTO category(id, name) " + "VALUES (?, ?) ";
-		newCategory.setCategoryId(getNextCategoryId());
-		jdbcTemplate.update(sql, newCategory.getCategoryId(), newCategory.getCategoryName());
+		String sql = "INSERT INTO category (id, name) VALUES (DEFAULT, ?) RETURNING id";
+		Integer categoryId = jdbcTemplate.queryForObject(sql, Integer.class, newCategory.getCategoryName());
+	
+		newCategory.setCategoryId(categoryId);
 	}
 
 	@Override
 	public void update(Category category) {
 		String sql = "UPDATE category SET name = ? WHERE id = ? ";
-		jdbcTemplate.update(sql, category.getCategoryName());
+		jdbcTemplate.update(sql, category.getCategoryName(), category.getCategoryId());
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class JDBCCategoryDAO implements CategoryDAO {
 	@Override
 	public Category findCategoryById(long id) {
 		Category category = null;
-		String sql = "SELECT id, name WHERE id = ? ";
+		String sql = "SELECT id, name FROM category WHERE id = ? ";
 		SqlRowSet rows = jdbcTemplate.queryForRowSet(sql, id);
 		
 		if (rows.next()) {
@@ -58,14 +59,6 @@ public class JDBCCategoryDAO implements CategoryDAO {
 		return category;
 	}
 
-	private long getNextCategoryId() {
-		SqlRowSet nextCategoryResult = jdbcTemplate.queryForRowSet("SELECT nextval('deq_category_id')");
-		if (nextCategoryResult.next()) {
-			return nextCategoryResult.getLong(1);
-		} else {
-			throw new RuntimeException("Something went wrong while getting an id for the new category");
-		}
-	}
 	
 	private Category mapRowToCategory(SqlRowSet result) {
 		Category selectedCategory;
