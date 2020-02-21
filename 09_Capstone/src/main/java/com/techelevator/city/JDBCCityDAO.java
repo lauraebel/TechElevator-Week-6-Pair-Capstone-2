@@ -40,8 +40,8 @@ public class JDBCCityDAO implements CityDAO {
 
 	@Override
 	public void update(City city) {
-		String sql = "UPDATE city SET id = ?, name = ?, state_abbreviation = ? WHERE id = ? ";
-		jdbcTemplate.update(sql, city.getCityId(), city.getCityName(), city.getStateAbbreviation());
+		String sql = "UPDATE city SET name = ?, state_abbreviation = ? WHERE id = ? ";
+		jdbcTemplate.update(sql, city.getCityName(), city.getStateAbbreviation());
 	}
 
 	@Override

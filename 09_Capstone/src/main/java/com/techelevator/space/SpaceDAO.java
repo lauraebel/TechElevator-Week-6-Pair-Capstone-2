@@ -8,12 +8,10 @@ public interface SpaceDAO {
 	
 	public List<Space> getAllSpaces();
 	
-	public List<Space> findSpaceById(long id);
+	public Space findSpaceById(long id);
 	
 	public List<Space> findSpaceByVenueId(long venueId);
-	
-	public List<Space> findSpaceByName(String name);
-	
+		
 	public List<Space> findSpaceByAccessibility(boolean isAccessible);
 	
 	public List<Space> findSpaceByOpenMonth(int openFrom);

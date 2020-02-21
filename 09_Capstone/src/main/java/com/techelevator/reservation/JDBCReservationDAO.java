@@ -64,8 +64,8 @@ public class JDBCReservationDAO implements ReservationDAO {
 
 	@Override
 	public void update(Reservation reservation) {
-		String sql = "UPDATE reservation SET reservation_id = ?, space_id = ?, number_of_attendees = ?, start_date = ?, end_date = ?, reserved_for = ? WHERE reservation_id = ? ";
-		jdbcTemplate.update(sql, reservation.getReservationId(), reservation.getSpaceId(), reservation.getNumberOfAttendees(), 
+		String sql = "UPDATE reservation SET space_id = ?, number_of_attendees = ?, start_date = ?, end_date = ?, reserved_for = ? WHERE reservation_id = ? ";
+		jdbcTemplate.update(sql, reservation.getSpaceId(), reservation.getNumberOfAttendees(), 
 				reservation.getStartDate(), reservation.getEndDate(), reservation.getReservedFor());
 	}
 
