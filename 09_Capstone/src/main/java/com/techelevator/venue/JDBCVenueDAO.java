@@ -39,26 +39,39 @@ public class JDBCVenueDAO implements VenueDAO{
 	
 	@Override
 	public void update(Venue venue) {
+		String sql = "UPDATE venue SET name = ?, city_id = ?, description = ? WHERE id = ?";
+		jdbcTemplate.update(sql, venue.getVenueName(), venue.getCityId(), venue.getVenueDescription());
+		
 		
 	}
 
 	@Override
 	public void delete(long id) {
+		String sql = "DELETE FROM venue WHERE id = ?";
+		jdbcTemplate.update(sql, id);
 		
 	}
 	@Override
 	public Venue findVenueById(long id) {
-		return null;
+		Venue thevenue = null;
+		String sqlFindVenueById = "SELECT id, name, city_id, description FROM venue WHERE id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlFindVenueById, id);
+		if (results.next()) {
+			thevenue = mapRowToVenue(results);
+		}
+		return thevenue;
 	}
 
 	@Override
-	public Venue findVenueByName(String name) {
-		return null;
-	}
-
-	@Override
-	public Venue findVenueByCityId(long cityId) {
-		return null;
+	public List<Venue> findVenueByCityId(long cityId) {
+		List<Venue> venues = new ArrayList<>();
+		String sqlFindVenueByCityId = "SELECT id, name, city_id, description FROM venue WHERE city_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlFindVenueByCityId, cityId);
+		while (results.next()) {
+			Venue venue = mapRowToVenue(results);
+			venues.add(venue);
+		}
+		return venues;
 	}
 	
 	private Venue mapRowToVenue(SqlRowSet result) {

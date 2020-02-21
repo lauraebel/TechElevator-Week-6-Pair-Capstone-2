@@ -9,10 +9,8 @@ public interface VenueDAO {
 	public List<Venue> getAllVenues();
 	
 	public Venue findVenueById(long id);
-	
-	public Venue findVenueByName(String name);
-	
-	public Venue findVenueByCityId(long cityId);
+		
+	public List<Venue> findVenueByCityId(long cityId);
 	
 	public void update(Venue venue);
 	
