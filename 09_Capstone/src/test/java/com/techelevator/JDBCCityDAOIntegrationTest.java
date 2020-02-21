@@ -82,7 +82,6 @@ public class JDBCCityDAOIntegrationTest {
 		
 		Assert.assertNotNull("updatedCity is null", updatedCity);
 		Assert.assertEquals("updated names do not match", city.getCityName(), updatedCity.getCityName());
-		Assert.assertEquals("updated IDs do not match", city.getCityId(), updatedCity.getCityId());
 	}
 	
 	@Test

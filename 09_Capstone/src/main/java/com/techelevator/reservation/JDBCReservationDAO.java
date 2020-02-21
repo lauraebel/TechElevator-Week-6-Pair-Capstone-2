@@ -1,6 +1,7 @@
 package com.techelevator.reservation;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,52 +52,16 @@ public class JDBCReservationDAO implements ReservationDAO {
 	}
 
 	@Override
-	public Reservation findReservationByReservedFor(String reservedFor) {
-		Reservation selectedReservation = null;
-		String sqlFindByReservedFor = "SELECT reservation_id, space_id, number_of_attendees, start_date, end_date, reserved_for "
-				+ "FROM reservation " + "WHERE reserved_for = ? ";
-		SqlRowSet rows = jdbcTemplate.queryForRowSet(sqlFindByReservedFor, reservedFor);
-		if(rows.next()) {
-			selectedReservation = mapRowToReservation(rows);
-		}
-		return selectedReservation;
-	}
-
-	@Override
 	public void update(Reservation reservation) {
 		String sql = "UPDATE reservation SET space_id = ?, number_of_attendees = ?, start_date = ?, end_date = ?, reserved_for = ? WHERE reservation_id = ? ";
 		jdbcTemplate.update(sql, reservation.getSpaceId(), reservation.getNumberOfAttendees(), 
-				reservation.getStartDate(), reservation.getEndDate(), reservation.getReservedFor());
+				reservation.getStartDate(), reservation.getEndDate(), reservation.getReservedFor(), reservation.getReservationId());
 	}
 
 	@Override
 	public void delete(long id) {
 		String sql = "DELETE FROM reservation WHERE reservation_id = ? ";
 		jdbcTemplate.update(sql, id);
-	}
-	
-	@Override
-	public Reservation findReservationByStartDate(Date startDate) {
-		Reservation selectedReservation = null;
-		String sqlFindByStart = "SELECT reservation_id, space_id, number_of_attendees, start_date, end_date, reserved_for "
-				+ "FROM reservation " + "WHERE start_date = ? ";
-		SqlRowSet rows = jdbcTemplate.queryForRowSet(sqlFindByStart, startDate);
-		if(rows.next()) {
-			selectedReservation = mapRowToReservation(rows);
-		}
-		return selectedReservation;
-	}
-	
-	@Override
-	public Reservation findReservationByEndDate(Date endDate) {
-		Reservation selectedReservation = null;
-		String sqlFindByEnd = "SELECT reservation_id, space_id, number_of_attendees, start_date, end_date, reserved_for "
-				+ "FROM reservation " + "WHERE end_date = ? ";
-		SqlRowSet rows = jdbcTemplate.queryForRowSet(sqlFindByEnd, endDate);
-		if(rows.next()) {
-			selectedReservation = mapRowToReservation(rows);
-		}
-		return selectedReservation;
 	}
 
 	@Override
@@ -111,7 +76,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 	}
 	
 	private long getNextReservationId() {
-		SqlRowSet nextResResult = jdbcTemplate.queryForRowSet("SELECT nextval('seq_reservation_id')");
+		SqlRowSet nextResResult = jdbcTemplate.queryForRowSet("SELECT nextval('reservation_reservation_id_seq')");
 		if (nextResResult.next()) {
 			return nextResResult.getLong(1);
 		} else {
@@ -124,8 +89,8 @@ public class JDBCReservationDAO implements ReservationDAO {
 		selectedReservation.setReservationId(results.getLong("reservation_id"));
 		selectedReservation.setSpaceId(results.getLong("space_id"));
 		selectedReservation.setNumberOfAttendees(results.getInt("number_of_attendees"));
-		selectedReservation.setStartDate(results.getDate("start_date"));
-		selectedReservation.setEndDate(results.getDate("end_date"));
+		selectedReservation.setStartDate(results.getDate("start_date").toLocalDate());
+		selectedReservation.setEndDate(results.getDate("end_date").toLocalDate());
 		selectedReservation.setReservedFor(results.getString("reserved_for"));
 		return selectedReservation;
 	}
