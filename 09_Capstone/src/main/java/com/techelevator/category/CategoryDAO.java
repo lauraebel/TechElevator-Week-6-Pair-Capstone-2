@@ -8,10 +8,8 @@ public interface CategoryDAO {
 	
 	public List<Category> getAllCategories();
 	
-	public List<Category> findCategoryById(long id);
-	
-	public List<Category> findCategoryByName(String name);
-	
+	public Category findCategoryById(long id);
+		
 	public void update(Category category);
 	
 	public void delete(long id);
