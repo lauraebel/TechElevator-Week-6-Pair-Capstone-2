@@ -4,8 +4,36 @@ public class Venue {
 	
 	private long venueId;
 	private String venueName;
-	private long cityId;
+	private String cityName;
+	private String stateName;
+	private String category;
 	private String venueDescription;
+	private long cityId;
+	
+	public long getCityId() {
+		return cityId;
+	}
+	public void setCityId(long cityId) {
+		this.cityId = cityId;
+	}
+	public String getCityName() {
+		return cityName;
+	}
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+	public String getStateName() {
+		return stateName;
+	}
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	
 	public long getVenueId() {
 		return venueId;
@@ -18,12 +46,6 @@ public class Venue {
 	}
 	public void setVenueName(String venueName) {
 		this.venueName = venueName;
-	}
-	public long getCityId() {
-		return cityId;
-	}
-	public void setCityId(long cityId) {
-		this.cityId = cityId;
 	}
 	public String getVenueDescription() {
 		return venueDescription;

@@ -14,4 +14,7 @@ public interface VenueDAO {
 	
 	public void delete(long id);
 
+	public void venueCity();
+	
+
 }
