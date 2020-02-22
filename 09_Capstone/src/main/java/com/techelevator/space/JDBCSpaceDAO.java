@@ -29,7 +29,7 @@ public class JDBCSpaceDAO implements SpaceDAO{
 	public void update(Space space) {
 		String sql = "UPDATE space SET venue_id = ?, name = ?, is_accessible = ?, open_from = ?, open_to = ?, daily_rate = ?, max_occupancy = ? WHERE id = ? ";
 		jdbcTemplate.update(sql, space.getVenueId(), space.getSpaceName(), space.isAccessible(), 
-				space.getOpenFrom(), space.getOpenTo(), space.getDailyRate(), space.getMaxOccupancy());
+				space.getOpenFrom(), space.getOpenTo(), space.getDailyRate(), space.getMaxOccupancy(), space.getSpaceId());
 	}
 
 	@Override
@@ -41,9 +41,9 @@ public class JDBCSpaceDAO implements SpaceDAO{
 	@Override
 	public List<Space> getAllSpaces() {
 		List<Space> spaces = new ArrayList<Space>();
-		SqlRowSet rows = jdbcTemplate.queryForRowSet("SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy");
+		SqlRowSet rows = jdbcTemplate.queryForRowSet("SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate::decimal, max_occupancy FROM space");
 		
-		if(rows.next()) {
+		while(rows.next()) {
 			spaces.add(mapRowToSpace(rows));
 		}
 		return spaces;
@@ -62,91 +62,8 @@ public class JDBCSpaceDAO implements SpaceDAO{
 		return selectedSpace;
 	}
 
-	@Override
-	public List<Space> findSpaceByVenueId(long venueId) {
-		List<Space> spaces = new ArrayList<>();
-		String sqlFindSpaceByVenueId = "SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy " + "FROM space "
-		+ "WHERE venue_id = ? ";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlFindSpaceByVenueId, venueId);
-		
-		while (result.next()) {
-			Space selectedSpace = mapRowToSpace(result);
-			spaces.add(selectedSpace);
-		}
-		return spaces;
-	}
-
-	@Override
-	public List<Space> findSpaceByAccessibility(boolean isAccessible) {
-		List<Space> spaces = new ArrayList<>();
-		String sqlFindSpaceByAccessibility = "SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy " + "FROM space "
-		+ "WHERE is_accessible = ? ";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlFindSpaceByAccessibility, isAccessible);
-		
-		while(result.next()) {
-			Space selectedSpace = mapRowToSpace(result);
-			spaces.add(selectedSpace);
-		}
-		return spaces;
-	}
-
-	@Override
-	public List<Space> findSpaceByOpenMonth(int openFrom) {
-		List<Space> spaces = new ArrayList<>();
-		String sqlFindSpaceByOpenMonth = "SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy " + "FROM space "
-		+ "WHERE open_from = ? ";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlFindSpaceByOpenMonth, openFrom);
-		
-		while(result.next()) {
-			Space selectedSpace = mapRowToSpace(result);
-			spaces.add(selectedSpace);
-		}
-		return spaces;
-	}
-
-	@Override
-	public List<Space> findSpaceByCloseMonth(int openTo) {
-		List<Space> spaces = new ArrayList<>();
-		String sqlFindSpaceByCloseMonth = "SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy " + "FROM space "
-		+ "WHERE open_to = ? ";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlFindSpaceByCloseMonth, openTo);
-		
-		while(result.next()) {
-			Space selectedSpace = mapRowToSpace(result);
-			spaces.add(selectedSpace);
-		}
-		return spaces;
-	}
-	@Override
-	public List<Space> findSpaceByRate(double dailyRate) {
-		List<Space> spaces = new ArrayList<>();
-		String sqlFindSpaceByRate = "SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy " + "FROM space "
-		+ "WHERE daily_rate = ? ";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlFindSpaceByRate, dailyRate);
-		
-		while(result.next()) {
-			Space selectedSpace = mapRowToSpace(result);
-			spaces.add(selectedSpace);
-		}
-		return spaces;
-	}
-
-	@Override
-	public List<Space> findSpaceByOccupancy(int maxOccupancy) {
-		List<Space> spaces = new ArrayList<>();
-		String sqlFindSpaceByOccupancy = "SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy " + "FROM space "
-		+ "WHERE max_occupancy = ? ";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlFindSpaceByOccupancy, maxOccupancy);
-		
-		while(result.next()) {
-			Space selectedSpace = mapRowToSpace(result);
-			spaces.add(selectedSpace);
-		}
-		return spaces;
-	}
-
 	private long getNextSpaceId() {
-		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('seq_space_id')");
+		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('space_id_seq')");
 		if (nextIdResult.next()) {
 			return nextIdResult.getLong(1);
 		} else {
@@ -162,7 +79,7 @@ public class JDBCSpaceDAO implements SpaceDAO{
 		selectedSpace.setAccessible(result.getBoolean("is_accessible"));
 		selectedSpace.setOpenFrom(result.getInt("open_from"));
 		selectedSpace.setOpenTo(result.getInt("open_to"));
-		selectedSpace.setDailyRate(result.getDouble("daily_rate"));
+		selectedSpace.setDailyRate(result.getBigDecimal("daily_rate"));
 		selectedSpace.setMaxOccupancy(result.getInt("max_occupancy"));
 		return selectedSpace;
 	}
