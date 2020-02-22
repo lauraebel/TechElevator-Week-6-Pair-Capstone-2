@@ -40,9 +40,7 @@ public class JDBCVenueDAO implements VenueDAO{
 	@Override
 	public void update(Venue venue) {
 		String sql = "UPDATE venue SET name = ?, city_id = ?, description = ? WHERE id = ?";
-		jdbcTemplate.update(sql, venue.getVenueName(), venue.getCityId(), venue.getVenueDescription(), venue.getVenueId());
-		
-		
+		jdbcTemplate.update(sql, venue.getVenueName(), venue.getCityId(), venue.getVenueDescription(), venue.getVenueId());	
 	}
 
 	@Override

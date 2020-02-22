@@ -2,8 +2,6 @@ package com.techelevator;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.techelevator.category.CategoryDAO;
@@ -30,39 +28,50 @@ public class ExcelsiorCLI {
 	private SpaceDAO spaceDao;
 	private StateDAO stateDao;
 	private VenueDAO venueDao;
-	List<Venue> venues;
 	
 	public static void main(String[] args) {
-		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/Excelsior-Venues");
-		dataSource.setUsername("postgres");
-		dataSource.setPassword("postgres1");
-
-		ExcelsiorCLI application = new ExcelsiorCLI(dataSource);
+		ExcelsiorCLI application = new ExcelsiorCLI();
 		application.run();
 	}
 
-	public ExcelsiorCLI(DataSource datasource) {
-		categoryDao = new JDBCCategoryDAO(datasource);
-		cityDao = new JDBCCityDAO(datasource);
-		reservationDao = new JDBCReservationDAO(datasource);
-		spaceDao = new JDBCSpaceDAO(datasource);
-		stateDao = new JDBCStateDAO(datasource);
-		venueDao = new JDBCVenueDAO(datasource);
+	public ExcelsiorCLI() {
+		this.menu = new Menu(System.in, System.out);
+		
+		BasicDataSource dataSource = new BasicDataSource();
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/excelsior-venues");
+		dataSource.setUsername("postgres");
+		dataSource.setPassword("postgres1");
+		
+		categoryDao = new JDBCCategoryDAO(dataSource);
+		cityDao = new JDBCCityDAO(dataSource);
+		reservationDao = new JDBCReservationDAO(dataSource);
+		spaceDao = new JDBCSpaceDAO(dataSource);
+		stateDao = new JDBCStateDAO(dataSource);
+		venueDao = new JDBCVenueDAO(dataSource);
 	}
 
 	public void run() {
-		int choice = menu.mainMenu(venues);
-		while(true) {
-			if (choice == 1) {
-				venueDao.getAllVenues();
-			} else {
+		while (true) {
+			String choice = menu.mainMenu();
+
+			if (choice.equals("1")) {
+				showAllVenues();
+				System.out.println();
+			} else if (choice.equalsIgnoreCase("Q")) {
 				System.exit(0);
 			}
-			
 		}
-
 	}
-	
 
+	private void showAllVenues() {
+		List<Venue> venues = venueDao.getAllVenues();
+		listVenues(venues);
+	}
+
+	private void listVenues(List<Venue> venues) {
+		System.out.println();
+		for (Venue venue : venues) {
+			System.out.println(venue.getVenueId() + ") " + venue.getVenueName());
+		}
+	}
 }

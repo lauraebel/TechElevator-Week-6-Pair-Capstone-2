@@ -1,66 +1,82 @@
 package com.techelevator;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
-import com.techelevator.category.CategoryDAO;
-import com.techelevator.city.CityDAO;
-import com.techelevator.reservation.ReservationDAO;
-import com.techelevator.space.SpaceDAO;
-import com.techelevator.state.StateDAO;
 import com.techelevator.venue.Venue;
-import com.techelevator.venue.VenueDAO;
 
 public class Menu {
 	
-	private CategoryDAO categoryDao;
-	private CityDAO cityDao;
-	private ReservationDAO reservationDao;
-	private SpaceDAO spaceDao;
-	private StateDAO stateDao;
-	private VenueDAO venueDao;
-	List<Venue> venues;
-	
-	private Scanner in = new Scanner(System.in);
-		
-	public void displayMessage(String message) {
-		System.out.println(message);
+	private PrintWriter out;
+	private Scanner in;
+	private List<Venue> venues;
+
+	public Menu(InputStream input, OutputStream output) {
+		this.out = new PrintWriter(output);
+		this.in = new Scanner(input);
 	}
 	
-	public int mainMenu(List<Venue> venues) {
-		int choice = 0;
+	public String mainMenu() {
 		boolean loop;
+		String choice = null;
 		
-		do {
-			System.out.println( "(1) List Venues\n(Q) Quit");
-
+		System.out.println("What would you like to do?\n(1) List Venues\n(Q) Quit");
+		while (choice == null) {
 			loop = false;
-			choice = in.nextInt();
-			in.nextLine();
-			
-		} while (loop);
-			return choice;
+			choice = in.nextLine();
 		}
-		
+		return choice;
 	}
-
-//	public int mainMenu(Map<String, Fridge> inventory) {
-//	boolean loop;
-//	int choice = 0;
-//	do {
-//	System.out.println("(1) Display Catering Items\n(2) Order\n(3) Quit");
-//	try {
-//		loop = false;
-//		choice = in.nextInt();
-//		
-//	} catch (InputMismatchException e) {
-//		System.out.println("Error: Invalid option. Please choose again.");
-//		loop = true;
-//	} in.nextLine();
-//
-//	} while (loop);
+}
+	
+	
+	
+//	public String getChoiceFromOptions(String[] options) {
+//		String choice = null;
+//		while(choice == null) {
+//			displayMenuOptions(options);
+//			choice = getChoiceFromUserInput(options);
+//		}
 //		return choice;
-//}
+//	}
+//	
+//	private String getChoiceFromUserInput(String[] options) {
+//		String choice = null;
+//		String userInput = in.nextLine();
+//		
+//		try {
+//			int selectedOption = Integer.valueOf(userInput);
+//			if(selectedOption <= options.length) {
+//				choice = options[selectedOption - 1];
+//			}
+//		} catch(NumberFormatException e) {
+//		} if(choice == null) {
+//			System.out.println(userInput + " is not a valid option. Please try again");
+//		}
+//		return choice;
+//	}
+//	
+//	private void displayMenuOptions(String[] options) {
+//		
+//		System.out.println();
+//		
+//		for(int i = 0; i < options.length; i++) {
+//			int number = i + 1;
+//			System.out.println(number + ") " + options[i]);
+//		}
+	
+	
+	
+	
+	
+	
+	
+
+	
 
 
 
