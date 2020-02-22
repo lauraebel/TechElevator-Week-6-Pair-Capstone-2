@@ -1,108 +1,132 @@
 package com.techelevator;
 
-import java.util.List;
 import java.sql.SQLException;
-import java.time.LocalDate;
-
-import javax.sql.DataSource;
 
 import org.junit.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import com.techelevator.city.JDBCCityDAO;
 import com.techelevator.venue.JDBCVenueDAO;
 import com.techelevator.venue.Venue;
+import com.techelevator.venue.VenueDAO;
 
 public class JDBCVenueDAOIntegrationTest {
 	
-	private JDBCVenueDAO venueDao;
-	private int venueId;
+	private VenueDAO dao;
 	private JdbcTemplate jdbcTemplate;
-
-	/*
-	 * Using this particular implementation of DataSource so that every database
-	 * interaction is part of the same database session and hence the same database
-	 * transaction
-	 */
+	private static final String TEST_VENUE = "Fake Venue";
 	private static SingleConnectionDataSource dataSource;
 
-	/*
-	 * Before any tests are run, this method initializes the datasource for testing.
-	 */
 	@BeforeClass
 	public static void setupDataSource() {
 		dataSource = new SingleConnectionDataSource();
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/excelsior-venues");
 		dataSource.setUsername("postgres");
 		dataSource.setPassword("postgres1");
-		/*
-		 * The following line disables autocommit for connections returned by this
-		 * DataSource. This allows us to rollback any changes after each test
-		 */
 		dataSource.setAutoCommit(false);
 	}
-
-	/*
-	 * After all tests have finished running, this method will close the DataSource
-	 */
+	
 	@AfterClass
 	public static void closeDataSource() throws SQLException {
 		dataSource.destroy();
 	}
 
-	/*
-	 * After each test, we rollback any changes that were made to the database so
-	 * that everything is clean for the next test
-	 */
 	@After
 	public void rollback() throws SQLException {
 		dataSource.getConnection().rollback();
 	}
-
-	/*
-	 * This method provides access to the DataSource for subclasses so that they can
-	 * instantiate a DAO for testing
-	 */
-//	protected DataSource getDataSource() {
-//		return dataSource;
-//	}
 	
 	@Before
 	public void setup() {
+		dao = new JDBCVenueDAO(dataSource);
 		jdbcTemplate = new JdbcTemplate(dataSource);
-		String sql = "INSERT INTO venue(id, name, city_id, description) VALUES (?, 'name', ?, 'description')";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.update(sql);	
-		venueDao = new JDBCVenueDAO(dataSource);
 	}
-	
 
 	@Test
-	public void show_all_venues() {			
-		List<Venue> results = venueDao.getAllVenues();
-
-		Assert.assertNotNull(results);
-		Assert.assertTrue(results.size() >= 1);
+	public void selecting_by_venue_id() {
+		Venue venue = getVenue("name", 4, "description");
+		dao.save(venue);
+		
+		Venue selectedVenue = dao.findVenueById(venue.getVenueId());
+		
+		Assert.assertNotNull(selectedVenue);
+		Assert.assertEquals(venue.getVenueId(), selectedVenue.getVenueId());
 	}
 	
 	@Test
-	public void creating_new_venue() {
-		Venue venue = new Venue();
-		venue.setVenueName("Name");
-		venue.setCityId(2);
-		venue.setVenueDescription("description");
+	public void inserting_new_venue() {
+		Venue venue = getVenue("name", 4, "description");
+		dao.save(venue);
 		
-		venueDao.save(venue);
+		Venue newVenue = dao.findVenueById(venue.getVenueId());
 		
-		Venue newVenue = venueDao.findVenueById(venue.getVenueId());
-		Assert.assertNotEquals(0, newVenue.getVenueId());
-		Assert.assertNotNull(venue);
-		
+		Assert.assertNotNull(newVenue);
+		Assert.assertEquals(venue.getCityId(), newVenue.getCityId());
+		Assert.assertEquals(venue.getVenueDescription(), newVenue.getVenueDescription());
+	}
 
+	@Test
+	public void updating_a_venue_name() {
+		Venue venue = getVenue("name", 4, "description");
+		dao.save(venue);
+		
+		venue.setVenueName("updatedName");
+		dao.update(venue);
+		
+		Venue updatedVenue = dao.findVenueById(venue.getVenueId());
+		
+		Assert.assertNotNull(updatedVenue);
+		Assert.assertEquals(venue.getVenueName(), updatedVenue.getVenueName());
+	}
+	
+	@Test
+	public void updating_a_venue_city_id() {
+		Venue venue = getVenue("name", 4, "description");
+		dao.save(venue);
+		
+		venue.setCityId(1);
+		dao.update(venue);
+		
+		Venue updatedVenue = dao.findVenueById(venue.getVenueId());
+		
+		Assert.assertNotNull(updatedVenue);
+		Assert.assertEquals(venue.getCityId(), updatedVenue.getCityId());
+	}
+	
+	@Test
+	public void deleting_a_venue() {
+		Venue venue = getVenue("name", 4, "description");
+		dao.save(venue);
+		
+		dao.delete(venue.getVenueId());
+		
+		Venue deletedVenue = dao.findVenueById(venue.getVenueId());
+		
+		Assert.assertNull(deletedVenue);
+	}
+	@Test
+	public void shows_all_venues() {
+		String sqlShowsAllVenues = "INSERT INTO venue (id, name, city_id, description) "
+				+ "VALUES (17, ?, 3, 'description') ";
+		
+		jdbcTemplate.update(sqlShowsAllVenues, TEST_VENUE);
+		
+		boolean showsVenues = false;
+		
+		for(Venue venues : dao.getAllVenues()) {
+			String example = venues.getVenueName();
+			if(example.equals("Fake Venue")) {
+				showsVenues = true;
+			}
+		}
+		Assert.assertTrue(showsVenues);
+	}
+ 	
+	private Venue getVenue(String name, long cityId, String description) {
+		Venue selectedVenue = new Venue();
+		selectedVenue.setVenueName("venueName");
+		selectedVenue.setCityId(4);
+		selectedVenue.setVenueDescription("venueDescription");
+		return selectedVenue;
 	}
 }
-	
-	
-

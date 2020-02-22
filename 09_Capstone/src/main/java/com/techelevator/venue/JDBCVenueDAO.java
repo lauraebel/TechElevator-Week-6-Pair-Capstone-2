@@ -19,12 +19,12 @@ public class JDBCVenueDAO implements VenueDAO{
 	@Override
 	public List<Venue> getAllVenues() {
 		List<Venue> venues = new ArrayList<Venue>();
-		String selectAllVenues = "SELECT * FROM venue";
+		String selectAllVenues = "SELECT id, name, city_id, description FROM venue";
 		SqlRowSet result = jdbcTemplate.queryForRowSet(selectAllVenues);
 		
 		while(result.next()) {
 			venues.add(mapRowToVenue(result));
-			}
+		}
 		return venues;
 	}
 		
@@ -40,7 +40,7 @@ public class JDBCVenueDAO implements VenueDAO{
 	@Override
 	public void update(Venue venue) {
 		String sql = "UPDATE venue SET name = ?, city_id = ?, description = ? WHERE id = ?";
-		jdbcTemplate.update(sql, venue.getVenueName(), venue.getCityId(), venue.getVenueDescription());
+		jdbcTemplate.update(sql, venue.getVenueName(), venue.getCityId(), venue.getVenueDescription(), venue.getVenueId());
 		
 		
 	}
@@ -61,22 +61,10 @@ public class JDBCVenueDAO implements VenueDAO{
 		}
 		return thevenue;
 	}
-
-	@Override
-	public List<Venue> findVenueByCityId(long cityId) {
-		List<Venue> venues = new ArrayList<>();
-		String sqlFindVenueByCityId = "SELECT id, name, city_id, description FROM venue WHERE city_id = ?";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlFindVenueByCityId, cityId);
-		while (results.next()) {
-			Venue venue = mapRowToVenue(results);
-			venues.add(venue);
-		}
-		return venues;
-	}
 	
 	private Venue mapRowToVenue(SqlRowSet result) {
 		Venue venues = new Venue();
-		venues.setVenueId(result.getLong("venue_id"));
+		venues.setVenueId(result.getLong("id"));
 		venues.setVenueName(result.getString("name"));
 		venues.setCityId(result.getLong("city_id"));
 		venues.setVenueDescription(result.getString("description"));
@@ -84,7 +72,7 @@ public class JDBCVenueDAO implements VenueDAO{
 	}
 	
 	private long getNextVenueId() {
-		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('seq_venue_id')");
+		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");
 
 		if (nextIdResult.next()) {
 			return nextIdResult.getLong(1);
