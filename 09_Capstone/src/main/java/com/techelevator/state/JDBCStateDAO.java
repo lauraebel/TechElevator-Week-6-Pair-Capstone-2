@@ -8,6 +8,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import com.techelevator.reservation.Reservation;
+
 public class JDBCStateDAO implements StateDAO {
 	
 	private final JdbcTemplate jdbcTemplate;
@@ -24,20 +26,20 @@ public class JDBCStateDAO implements StateDAO {
 
 	@Override
 	public void update(State state) {
-		String sql = "UPDATE state SET abbreviation = ?, name = ?";
-		jdbcTemplate.update(sql, state.getStateAbbreviation(), state.getStateName());
+		String sql = "UPDATE state SET name = ? WHERE abbreviation = ? ";
+		jdbcTemplate.update(sql, state.getStateName(), state.getStateAbbreviation());
 	}
 
 	@Override
-	public void delete(String name) {
-		String sql = "DELETE FROM state WHERE name = ? ";
-		jdbcTemplate.update(sql, name);
+	public void delete(String abbreviation) {
+		String sql = "DELETE FROM state WHERE abbreviation = ? ";
+		jdbcTemplate.update(sql, abbreviation.toString());
 	}
 
 	@Override
 	public List<State> getAllStates() {
 		List<State> states = new ArrayList<>();
-		SqlRowSet rows = jdbcTemplate.queryForRowSet("SELECT abbreviation, name ");
+		SqlRowSet rows = jdbcTemplate.queryForRowSet("SELECT abbreviation, name FROM state ");
 		
 		while(rows.next()) {
 			states.add(mapRowToState(rows));
@@ -46,16 +48,18 @@ public class JDBCStateDAO implements StateDAO {
 	}
 
 	@Override
-	public List<State> findStateByAbbreviation(String abbreviation) {
-		List<State> states = new ArrayList<>();
-		String sqlFindStateByAbbreviation = "SELECT name FROM state WHERE abbreviation = ?";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlFindStateByAbbreviation, abbreviation);
-		while(results.next()) {
-			State selectedState = mapRowToState(results);
-			states.add(selectedState);
+	public State findStateByAbbreviation(String abbreviation) {
+		State selectedState = null;
+		String sqlFindByStateAbbreviation = "SELECT abbreviation, name "
+				+ "FROM state " + "WHERE abbreviation = ? ";
+		SqlRowSet rows = jdbcTemplate.queryForRowSet(sqlFindByStateAbbreviation, abbreviation);
+		if(rows.next()) {
+			selectedState = mapRowToState(rows);
 		}
-		return states;
+		return selectedState;
 	}
+
+	
 	
 	private State mapRowToState(SqlRowSet result) {
 		State selectedState;

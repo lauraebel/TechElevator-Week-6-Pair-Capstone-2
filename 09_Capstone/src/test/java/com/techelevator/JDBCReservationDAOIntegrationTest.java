@@ -1,11 +1,7 @@
 package com.techelevator;
 
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.time.LocalDate;
-
-import javax.swing.text.DateFormatter;
 
 import org.junit.*;
 import org.junit.AfterClass;

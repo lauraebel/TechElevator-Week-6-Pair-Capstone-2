@@ -3,8 +3,6 @@ package com.techelevator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.*;
 import org.springframework.jdbc.core.JdbcTemplate;

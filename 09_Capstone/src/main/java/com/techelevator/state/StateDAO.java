@@ -8,9 +8,9 @@ public interface StateDAO {
 	
 	public List<State> getAllStates();
 		
-	public List<State> findStateByAbbreviation(String abbreviation);
+	public State findStateByAbbreviation(String abbreviation);
 	
 	public void update(State state);
 	
-	public void delete(String name);
+	public void delete(String abbreviation);
 }
