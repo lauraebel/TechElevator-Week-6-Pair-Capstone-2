@@ -20,7 +20,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 	}
 
 	@Override
-	public void save(Reservation newReservation) {
+	public void createNewReservation(Reservation newReservation) {
 		String sqlInsertReservation = "INSERT INTO reservation(reservation_id, space_id, number_of_attendees, start_date, end_date, reserved_for) "
 				+ "VALUES (?, ?, ?, ?, ?, ?) ";
 		newReservation.setReservationId(getNextReservationId());

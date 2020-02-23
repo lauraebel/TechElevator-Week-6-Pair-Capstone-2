@@ -56,7 +56,7 @@ public class JDBCReservationDAOIntegrationTest {
 	@Test
 	public void select_reservation_by_id() {
 		Reservation reservation = getReservation(33, 100, LocalDate.of(2020, 10, 29), LocalDate.of(2020, 12, 31), "stuff");
-		dao.save(reservation);
+		dao.createNewReservation(reservation);
 		
 		Reservation selectedReservation = dao.findByReservationId(reservation.getReservationId());
 		Assert.assertNotNull("returned null", selectedReservation);
@@ -71,7 +71,7 @@ public class JDBCReservationDAOIntegrationTest {
 	@Test
 	public void insert_reservation() {
 		Reservation reservation = getReservation(33, 100, LocalDate.of(2020, 10, 29), LocalDate.of(2020, 12, 31), "stuff");
-		dao.save(reservation);
+		dao.createNewReservation(reservation);
 		
 		Assert.assertNotEquals("Id not created", 0, reservation.getReservationId());
 		
@@ -88,7 +88,7 @@ public class JDBCReservationDAOIntegrationTest {
 	@Test 
 	public void updating_number_of_attendees() {
 		Reservation reservation = getReservation(33, 100, LocalDate.of(2020, 10, 29), LocalDate.of(2020, 12, 31), "stuff");
-		dao.save(reservation);
+		dao.createNewReservation(reservation);
 		
 		reservation.setNumberOfAttendees(400);
 		dao.update(reservation);
@@ -102,7 +102,7 @@ public class JDBCReservationDAOIntegrationTest {
 	@Test
 	public void updating_end_date() {
 		Reservation reservation = getReservation(33, 100, LocalDate.of(2020, 10, 29), LocalDate.of(2020, 12, 31), "stuff");
-		dao.save(reservation);
+		dao.createNewReservation(reservation);
 
 		reservation.setEndDate(LocalDate.of(2030, 11, 19));
 		dao.update(reservation);
@@ -116,7 +116,7 @@ public class JDBCReservationDAOIntegrationTest {
 	@Test
 	public void deleting_a_reservation() {
 		Reservation reservation = getReservation(33, 100, LocalDate.of(2020, 10, 29), LocalDate.of(2020, 12, 31), "stuff");
-		dao.save(reservation);
+		dao.createNewReservation(reservation);
 		
 		dao.delete(reservation.getReservationId());
 		
@@ -128,7 +128,7 @@ public class JDBCReservationDAOIntegrationTest {
 	@Test
 	public void selecting_reservation_by_reserved_for() {
 		Reservation reservation = getReservation(33, 100, LocalDate.of(2020, 10, 29), LocalDate.of(2020, 12, 31), "stuff");
-		dao.save(reservation);
+		dao.createNewReservation(reservation);
 		
 		Reservation selectedReservation = dao.findByReservationId(reservation.getReservationId());
 		

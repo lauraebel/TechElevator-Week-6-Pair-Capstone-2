@@ -1,17 +1,12 @@
 package com.techelevator;
 
-import java.util.List;
 import java.util.Scanner;
-
-import com.techelevator.venue.Venue;
-import com.techelevator.venue.VenueDAO;
 
 public class Menu {
 	
 	private Scanner in = new Scanner(System.in);
-	private List<Venue> venues;
-	private VenueDAO venueDao;
-
+	
+	
 	public String mainMenu() {
 		String choice = null;
 		
@@ -70,6 +65,45 @@ public class Menu {
 	}
 	
 
+	public String startDateOfReservation() {
+		String startDateChosen = null;
+		
+		System.out.println("On what date will the reservation start? (MM/DD/YYYY)");
+		
+		startDateChosen = in.nextLine();
+		
+
+		
+		return startDateChosen;
+	}
+	
+	public String endDateOfReservation() {
+		String endDateChosen = null;
+		
+		System.out.println("On what date will the reservation end? (MM/DD/YYYY)");
+		
+		endDateChosen = in.nextLine();
+		
+		
+		return endDateChosen;
+	}
+	
+	public int howManyPeople() {
+		int resAttendees = 0;
+		
+		System.out.println("How many people will be in attendance?");
+		
+		resAttendees = in.nextInt();
+		
+		return resAttendees;
+	}
+	
+	public void availableSpacesHeading() {
+		System.out.println("***The following spaces are available based on your needs:");
+	}
+	
+	
+	
 	
 }
 

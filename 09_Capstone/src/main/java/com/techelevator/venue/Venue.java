@@ -34,7 +34,6 @@ public class Venue {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
 	public long getVenueId() {
 		return venueId;
 	}

@@ -1,5 +1,7 @@
 package com.techelevator;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -32,7 +34,10 @@ public class ExcelsiorCLI {
 	List<Venue> venues;
 	List<Space> spaces;
 	List<Reservation> reservations;
+	List<Space> available;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
+	
 	public static void main(String[] args) {
 		ExcelsiorCLI application = new ExcelsiorCLI();
 		application.run();
@@ -86,15 +91,23 @@ public class ExcelsiorCLI {
 					
 					if (anotherChoice.equals("1")) {
 						
-						String spaceChoice = menu.spaceMenu();
-//						if (venues.get(Integer.parseInt(venueChoice) - 1) != null) { //checks if choice is a valid space id
-//							jdbcVenue.findSpaceById(Integer.parseInt(spaceChoice));
-//							showAllVenueDetails();
-						//TODO reserve a space menu and confirmation - QUERY WILL NEED MADE IN JDBC
+						String stringStart = menu.startDateOfReservation();
+						String stringEnd = menu.endDateOfReservation();
+						int resAttendance = menu.howManyPeople();
+						
+						LocalDate dateStart = LocalDate.parse(stringStart, formatter);
+						LocalDate dateEnd = LocalDate.parse(stringEnd, formatter);
+						
+							available = spaceDao.getAvailableSpaces(dateStart, dateEnd, resAttendance);
+							
+						listSpaces(available);
+						
+						menu.availableSpacesHeading();
 						
 					} else if (anotherChoice.equalsIgnoreCase("R")) {
-						//returns to venue details 
-					}
+						chosenVenue = venues.get(Integer.parseInt(venueChoice) -1);
+						listVenueDetails(chosenVenue); 
+						System.out.println();					}
 					
 				} if(nextChoice.equals("2")) {
 					String reservationChoice = menu.searchForReservation();
