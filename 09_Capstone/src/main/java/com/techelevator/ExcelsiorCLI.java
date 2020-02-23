@@ -54,52 +54,59 @@ public class ExcelsiorCLI {
 	}
 
 	public void run() {
-		while (true) {
+		
 			String choice = menu.mainMenu();
+			
 			if (choice.equals("1")) { //Lists venues
-				showAllVenues();
+				venues = venueDao.getAllVenues();
+				listVenues(venues);
+				
+				String venueChoice = menu.venueMenu();
+				
+				if (venueChoice.equalsIgnoreCase("R")) { //returns to main menu
+					System.out.flush();
+					menu.mainMenu();
+					
+				} else if (venues.get(Integer.parseInt(venueChoice) - 1) != null) { //checks if choice is a valid venue id
+					Venue chosenVenue = venues.get(Integer.parseInt(venueChoice) -1);
+					listVenueDetails(chosenVenue); 
+					System.out.println();
+				} 
+				
+				String nextChoice = menu.whatNextMenu(); //After venue is selected and details are shown - "What would you like to do next?\n(1) View Spaces\n(2) Search for Reservation\n(R) Return to previous screen")
+				
+				if (nextChoice.equals("1")) {
+					Venue chosenVenue = venues.get(Integer.parseInt(venueChoice) -1);
+					spaces = spaceDao.getAllSpaces();
+					listSpaces(spaces);
+					
+					String anotherChoice = menu.spaceNextVenue();//"What would you like to do next?\n(1) Reserve a Space\n(R) Return to previous screen")
+					
+					if (anotherChoice.equals("1")) {
+						
+						String spaceChoice = menu.spaceMenu();
+//						if (venues.get(Integer.parseInt(venueChoice) - 1) != null) { //checks if choice is a valid space id
+//							jdbcVenue.findSpaceById(Integer.parseInt(spaceChoice));
+//							showAllVenueDetails();
+						//TODO reserve a space menu and confirmation - QUERY WILL NEED MADE IN JDBC
+						
+					} else if (anotherChoice.equalsIgnoreCase("R")) {
+						//returns to venue details 
+					}
+					
+
+				} if(nextChoice.equals("2")) {
+					//TODO search for reservation by reserved for
+					
+				} else if(nextChoice.equalsIgnoreCase("R")) { //returns to venue menu
+					menu.venueMenu();
+				}
 				
 			} else if (choice.equalsIgnoreCase("Q")) { //Quits program
 				System.exit(0);
 			}
-			while (true) {
-				String venueChoice = menu.venueMenu();
-
-					if (venueChoice.equalsIgnoreCase("R")) { //returns to main menu
-						menu.mainMenu();
-					} else if (venues.get(Integer.parseInt(venueChoice) - 1) != null) { //checks if choice is a valid venue id
-						jdbcVenue.findVenueById(Integer.parseInt(venueChoice));
-						showAllVenueDetails(); //TODO shows details of that venue - CURRENTLY NULL POINTER
-					} 
-				}
-			}
-			while (true) {
-				String nextChoice = menu.whatNextMenu(); //After venue is selected and details are shown
-				
-					if (nextChoice.equals("1")) {
-						//TODO List Venue Spaces: numbered, name, open month, close month, daily rate, and occupancy
-					} else if(nextChoice.equals("2")) {
-						//TODO search for reservation by reserved for
-					} else if(nextChoice.equalsIgnoreCase("R")) { //returns to venue menu
-						menu.venueMenu();
-					}
-			}
-			while (true) {
-				String spaceChoice = menu.spaceMenu();
-				
-				//TODO if statement checking if it is a valid choice
-			}
-			while (true) {
-				String anotherChoice = menu.spaceNextVenue(); //after space is selected and details are shown
-				
-					if (anotherChoice.equals("1")) {
-						//TODO reserve a space menu and confirmation - QUERY WILL NEED MADE IN JDBC
-					} else if (anotherChoice.equalsIgnoreCase("R")) {
-						menu.spaceMenu(); //returns to space menu
-					}
-		}
 	}
-}
+
 	private void listVenues(List<Venue> venues) {
 		for (Venue venue : venues) {
 			System.out.println(venue.getVenueId() + ") " + venue.getVenueName());
@@ -107,34 +114,21 @@ public class ExcelsiorCLI {
 		System.out.println("R) Return to previous screen");
 	}
 
-	private void showAllVenues() {
-	    venues = venueDao.getAllVenues();
-		listVenues(venues);
-	}
-
-	private void listVenueDetails(List<Venue> venueDetails) {
-		for (Venue venueDetailsList : venueDetails) {
-			System.out.println("Venue Name: " + venueDetailsList.getVenueName() + " | Location: " + venueDetailsList.getCityName() + ", "
-					+ venueDetailsList.getStateName() + " | Description: " + venueDetailsList.getVenueDescription());
-		}
-	}
-
-	private void showAllVenueDetails() {
-		venues = venueDao.getAllVenues();
-		listVenueDetails(venues);
+	private void listVenueDetails(Venue venue) {
+			System.out.println("Venue Name: " + venue.getVenueName());
+			System.out.println("Location: " + venue.getCityName() + ", " + venue.getStateName());
+			System.out.println("Category(ies): sorry - couldn't figure this out but it definitely has some");
+			System.out.println("Description: " + venue.getVenueDescription());
 	}
 	
 	private void listSpaces(List<Space> spaces) {
+		System.out.printf("%-15s %-43s %-15s %-11s %-13s %-15s\n", "ID Number", "Name", "Open", "Closed", "Daily Rate", "Maximum Occupancy");
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------------------");
 		for (Space space : spaces) {
-			System.out.println(space.getSpaceId() + ") " + space.getSpaceName() + " " + space.getOpenFrom() + " " + space.getOpenTo() + " " 
-					+ space.getDailyRate() + " " + space.getMaxOccupancy());
+			System.out.printf("%-15d %-45s %-15d %-10d $%-15.2f %-40d\n", space.getSpaceId(), space.getSpaceName(), space.getOpenFrom(), space.getOpenTo(),
+					 space.getDailyRate(), space.getMaxOccupancy());
 		//TODO if statement that changes the open from and to ints to month strings
 		}
-	}
-	
-	private void showAllSpaces() {
-		spaces = spaceDao.getAllSpaces();
-		listSpaces(spaces);
 	}
 	
 }

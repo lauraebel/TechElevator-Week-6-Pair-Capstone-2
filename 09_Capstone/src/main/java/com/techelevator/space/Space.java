@@ -1,6 +1,10 @@
 package com.techelevator.space;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class Space {
 	
@@ -61,7 +65,7 @@ public class Space {
 	public void setMaxOccupancy(int maxOccupancy) {
 		this.maxOccupancy = maxOccupancy;
 	}
-	
+
 	
 
 }

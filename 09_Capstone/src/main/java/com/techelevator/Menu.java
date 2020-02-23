@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.techelevator.venue.Venue;
+import com.techelevator.venue.VenueDAO;
 
 public class Menu {
 	
 	private Scanner in = new Scanner(System.in);
 	private List<Venue> venues;
+	private VenueDAO venueDao;
 
-
-	
 	public String mainMenu() {
 		String choice = null;
 		
@@ -58,7 +58,10 @@ public class Menu {
 		
 		return choiceSpace;
 	}
+	
 }
+
+
 	
 	
 	
