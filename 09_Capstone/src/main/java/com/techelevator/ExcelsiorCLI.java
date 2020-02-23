@@ -29,7 +29,6 @@ public class ExcelsiorCLI {
 	private StateDAO stateDao;
 	private VenueDAO venueDao;
 	List<Venue> venues;
-	private JDBCVenueDAO jdbcVenue;
 	List<Space> spaces;
 
 	public static void main(String[] args) {
@@ -76,7 +75,6 @@ public class ExcelsiorCLI {
 				String nextChoice = menu.whatNextMenu(); //After venue is selected and details are shown - "What would you like to do next?\n(1) View Spaces\n(2) Search for Reservation\n(R) Return to previous screen")
 				
 				if (nextChoice.equals("1")) {
-					Venue chosenVenue = venues.get(Integer.parseInt(venueChoice) -1);
 					spaces = spaceDao.getAllSpaces();
 					listSpaces(spaces);
 					
@@ -122,13 +120,15 @@ public class ExcelsiorCLI {
 	}
 	
 	private void listSpaces(List<Space> spaces) {
-		System.out.printf("%-15s %-43s %-15s %-11s %-13s %-15s\n", "ID Number", "Name", "Open", "Closed", "Daily Rate", "Maximum Occupancy");
-		System.out.println("------------------------------------------------------------------------------------------------------------------------------------------");
+		String[] month = spaces.get(0).getMonths();
+		System.out.printf("%-15s %-43s %-15s %-11s %-13s %-15s\n", "ID Number", "Name", "Open Mo.", "Close Mo.", "Daily Rate", "Maximum Occupancy");
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 		for (Space space : spaces) {
-			System.out.printf("%-15d %-45s %-15d %-10d $%-15.2f %-40d\n", space.getSpaceId(), space.getSpaceName(), space.getOpenFrom(), space.getOpenTo(),
+			System.out.printf("%-15d %-45s %-15s %-10s $%-15.2f %-40d\n", space.getSpaceId(), space.getSpaceName(), month[space.getOpenFrom()], month[space.getOpenTo()],
 					 space.getDailyRate(), space.getMaxOccupancy());
-		//TODO if statement that changes the open from and to ints to month strings
+		
 		}
+		System.out.println();
 	}
 	
 }

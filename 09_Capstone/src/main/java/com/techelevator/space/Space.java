@@ -8,6 +8,11 @@ import java.util.ListIterator;
 
 public class Space {
 	
+	private static final String[] months = new String[] {"", "Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."};
+
+	public static String[] getMonths() {
+		return months;
+	}
 	private long spaceId;
 	private long venueId;
 	private String spaceName;
