@@ -9,6 +9,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import com.techelevator.state.State;
+
 public class JDBCReservationDAO implements ReservationDAO {
 	
 	private final JdbcTemplate jdbcTemplate;
@@ -44,6 +46,26 @@ public class JDBCReservationDAO implements ReservationDAO {
 		String sqlFindBySpaceId = "SELECT reservation_id, space_id, number_of_attendees, start_date, end_date, reserved_for "
 				+ "FROM reservation " + "WHERE space_id = ? ";
 		SqlRowSet rows = jdbcTemplate.queryForRowSet(sqlFindBySpaceId, spaceId);
+		if(rows.next()) {
+			selectedReservation = mapRowToReservation(rows);
+		}
+		return selectedReservation;
+	}
+
+	@Override
+	public Reservation findReservationByReservedFor(String reservedFor) {
+		Reservation selectedReservation = null;
+		
+		String sqlFindByReservedFor = "SELECT reservation_id, space_id, number_of_attendees, start_date, end_date, reserved_for "
+				+ "FROM reservation "
+				+ "WHERE reserved_for ";
+//				"SELECT reservation.reservation_id AS reservation_id, reservation.space_id AS space_id, reservation.number_of_attendees AS number_of_attendees, reservation.start_date AS start_date, reservation.end_date AS end_date, reservation.reserved_for AS reserved_for, space.name AS space_name, venue.name AS venue_name "
+//				+ "FROM reservation "
+//				+ "JOIN space ON reservation.space_id = space.id "
+//				+ "JOIN venue ON space.venue_id = venue.id "
+//				+ "WHERE reserved_for = ? ";
+		
+		SqlRowSet rows = jdbcTemplate.queryForRowSet(sqlFindByReservedFor, reservedFor);
 		if(rows.next()) {
 			selectedReservation = mapRowToReservation(rows);
 		}
@@ -91,6 +113,8 @@ public class JDBCReservationDAO implements ReservationDAO {
 		selectedReservation.setStartDate(results.getDate("start_date").toLocalDate());
 		selectedReservation.setEndDate(results.getDate("end_date").toLocalDate());
 		selectedReservation.setReservedFor(results.getString("reserved_for"));
+//		selectedReservation.setSpaceName(results.getString("space_name"));
+//		selectedReservation.setVenueName(results.getString("venue_name"));
 		return selectedReservation;
 	}
 

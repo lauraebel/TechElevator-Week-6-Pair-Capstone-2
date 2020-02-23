@@ -39,6 +39,21 @@ public class JDBCSpaceDAO implements SpaceDAO{
 	}
 
 	@Override
+	public List<Space> getAllSpacesInVenue(long venueId) {
+		String selectAllSpacesInAVenue = "SELECT space.id AS space_id, space.venue_id AS venue_id, space.name AS space_name, space.is_accessible AS is_accessible, space.open_from AS open_from, space.open_to AS open_to, space.daily_rate::decimal AS daily_rate, space.max_occupancy AS max_occupancy " 
+				+ "FROM space " 
+				+ "JOIN venue ON space.venue_id = venue.id "
+				+ "WHERE venue_id = ? ";
+		List<Space> venueSpaces = new ArrayList<Space>();
+		SqlRowSet row = jdbcTemplate.queryForRowSet(selectAllSpacesInAVenue, venueId);
+		
+		while(row.next()) {
+			venueSpaces.add(mapRowToSpace(row));
+		}
+		return venueSpaces;
+	}
+	
+	@Override
 	public List<Space> getAllSpaces() {
 		List<Space> spaces = new ArrayList<Space>();
 		SqlRowSet rows = jdbcTemplate.queryForRowSet("SELECT id, venue_id, name, is_accessible, open_from, open_to, daily_rate::decimal, max_occupancy FROM space");
@@ -73,9 +88,9 @@ public class JDBCSpaceDAO implements SpaceDAO{
 	
 	private Space mapRowToSpace(SqlRowSet result) {
 		Space selectedSpace = new Space();
-		selectedSpace.setSpaceId(result.getLong("id"));
+		selectedSpace.setSpaceId(result.getLong("space_id"));
 		selectedSpace.setVenueId(result.getLong("venue_id"));
-		selectedSpace.setSpaceName(result.getString("name"));
+		selectedSpace.setSpaceName(result.getString("space_name"));
 		selectedSpace.setAccessible(result.getBoolean("is_accessible"));
 		selectedSpace.setOpenFrom(result.getInt("open_from"));
 		selectedSpace.setOpenTo(result.getInt("open_to"));

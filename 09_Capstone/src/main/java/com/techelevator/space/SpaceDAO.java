@@ -9,6 +9,8 @@ public interface SpaceDAO {
 	public List<Space> getAllSpaces();
 	
 	public Space findSpaceById(long id);
+	
+	public List<Space> getAllSpacesInVenue(long venueId);
 		
 	public void update(Space space);
 	

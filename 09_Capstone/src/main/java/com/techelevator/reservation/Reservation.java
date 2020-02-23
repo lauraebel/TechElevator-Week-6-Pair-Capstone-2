@@ -10,7 +10,21 @@ public class Reservation {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private String reservedFor;
+	private String venueName;
+	private String spaceName;
 	
+	public String getVenueName() {
+		return venueName;
+	}
+	public void setVenueName(String venueName) {
+		this.venueName = venueName;
+	}
+	public String getSpaceName() {
+		return spaceName;
+	}
+	public void setSpaceName(String spaceName) {
+		this.spaceName = spaceName;
+	}
 	public long getReservationId() {
 		return reservationId;
 	}

@@ -4,9 +4,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import org.junit.*;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -14,6 +11,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.techelevator.reservation.JDBCReservationDAO;
 import com.techelevator.reservation.Reservation;
 import com.techelevator.reservation.ReservationDAO;
+import com.techelevator.state.State;
 
 public class JDBCReservationDAOIntegrationTest {
 	
@@ -126,6 +124,18 @@ public class JDBCReservationDAOIntegrationTest {
 		
 		Assert.assertNull("reservation not deleted", deletedReservation);
 	}
+	
+	@Test
+	public void selecting_reservation_by_reserved_for() {
+		Reservation reservation = getReservation(33, 100, LocalDate.of(2020, 10, 29), LocalDate.of(2020, 12, 31), "stuff");
+		dao.save(reservation);
+		
+		Reservation selectedReservation = dao.findByReservationId(reservation.getReservationId());
+		
+		Assert.assertNotNull("state is null", selectedReservation);
+		Assert.assertEquals("abbreviations not equal", reservation.getReservedFor(), selectedReservation.getReservedFor());
+	}
+	
 	
 	@Test
 	public void shows_all_reservations() {

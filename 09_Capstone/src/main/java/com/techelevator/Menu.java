@@ -42,7 +42,7 @@ public class Menu {
 	public String whatNextMenu() {
 		String choiceNext = null;
 		
-		System.out.println("What would you like to do next?\n(1) View Spaces\n(2) Search for Reservation\n(R) Return to previous screen");
+		System.out.println("What would you like to do next?\n(1) View Spaces\n(2) Search for a Reservation\n(R) Return to previous screen");
 		
 			choiceNext = in.nextLine();
 			
@@ -58,6 +58,18 @@ public class Menu {
 		
 		return choiceSpace;
 	}
+	
+	public String searchForReservation() {
+		String reservationChoice = null;
+		
+		System.out.println("What is the name of the reservation you are looking for?");
+		
+		reservationChoice = in.nextLine();
+		
+		return reservationChoice;
+	}
+	
+
 	
 }
 

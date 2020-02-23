@@ -11,6 +11,8 @@ public interface ReservationDAO {
 	public Reservation findByReservationId(long id);
 	
 	public Reservation findReservationBySpaceId(long spaceId);
+	
+	public Reservation findReservationByReservedFor(String reservedFor);
 			
 	public void update(Reservation reservation);
 	

@@ -58,6 +58,7 @@ public class JDBCSpaceDAOIntegrationTest {
 		Assert.assertEquals("daily rates do not match", space.getDailyRate(), selectedSpace.getDailyRate());
 	}
 	
+	
 	@Test
 	public void insert_new_space() {
 		Space space = getSpace(1, "Baltic Avenue", true, 8, 5, new BigDecimal(400.0), 900);
