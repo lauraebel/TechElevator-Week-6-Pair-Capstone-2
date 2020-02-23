@@ -12,9 +12,6 @@ public interface VenueDAO {
 			
 	public void update(Venue venue);
 	
-	public void delete(long id);
-
-	public void venueCity();
-	
+	public void delete(long id);	
 
 }

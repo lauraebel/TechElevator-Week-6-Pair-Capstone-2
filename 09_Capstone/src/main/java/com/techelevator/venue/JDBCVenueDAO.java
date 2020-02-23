@@ -1,6 +1,5 @@
 package com.techelevator.venue;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,11 +32,6 @@ public class JDBCVenueDAO implements VenueDAO {
 		return venues;
 	}
 	
-	@Override
-	public void venueCity() {
-		String city = "SELECT * FROM venue JOIN city ON venue.city_id = city.id ";
-	}
-		
 	@Override
 	public void save(Venue newVenue) {
 		String sqlInsertVenue = "INSERT INTO venue(id, name, city_id, description) VALUES(?, ?, ?, ?)";

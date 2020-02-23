@@ -11,6 +11,7 @@ import com.techelevator.city.JDBCCityDAO;
 import com.techelevator.reservation.JDBCReservationDAO;
 import com.techelevator.reservation.ReservationDAO;
 import com.techelevator.space.JDBCSpaceDAO;
+import com.techelevator.space.Space;
 import com.techelevator.space.SpaceDAO;
 import com.techelevator.state.JDBCStateDAO;
 import com.techelevator.state.StateDAO;
@@ -28,6 +29,8 @@ public class ExcelsiorCLI {
 	private StateDAO stateDao;
 	private VenueDAO venueDao;
 	List<Venue> venues;
+	private JDBCVenueDAO jdbcVenue;
+	List<Space> spaces;
 
 	public static void main(String[] args) {
 		ExcelsiorCLI application = new ExcelsiorCLI();
@@ -53,25 +56,50 @@ public class ExcelsiorCLI {
 	public void run() {
 		while (true) {
 			String choice = menu.mainMenu();
-			if (choice.equals("1")) {
+			if (choice.equals("1")) { //Lists venues
 				showAllVenues();
 				
-			} else if (choice.equalsIgnoreCase("Q")) {
+			} else if (choice.equalsIgnoreCase("Q")) { //Quits program
 				System.exit(0);
 			}
 			while (true) {
 				String venueChoice = menu.venueMenu();
 
-					if (venueChoice.equalsIgnoreCase("R")) {
+					if (venueChoice.equalsIgnoreCase("R")) { //returns to main menu
 						menu.mainMenu();
-					} else if (venues.get(Integer.parseInt(venueChoice) - 1) != null) {
-						showAllVenueDetails();
-					}
+					} else if (venues.get(Integer.parseInt(venueChoice) - 1) != null) { //checks if choice is a valid venue id
+						jdbcVenue.findVenueById(Integer.parseInt(venueChoice));
+						showAllVenueDetails(); //TODO shows details of that venue - CURRENTLY NULL POINTER
+					} 
 				}
 			}
+			while (true) {
+				String nextChoice = menu.whatNextMenu(); //After venue is selected and details are shown
+				
+					if (nextChoice.equals("1")) {
+						//TODO List Venue Spaces: numbered, name, open month, close month, daily rate, and occupancy
+					} else if(nextChoice.equals("2")) {
+						//TODO search for reservation by reserved for
+					} else if(nextChoice.equalsIgnoreCase("R")) { //returns to venue menu
+						menu.venueMenu();
+					}
+			}
+			while (true) {
+				String spaceChoice = menu.spaceMenu();
+				
+				//TODO if statement checking if it is a valid choice
+			}
+			while (true) {
+				String anotherChoice = menu.spaceNextVenue(); //after space is selected and details are shown
+				
+					if (anotherChoice.equals("1")) {
+						//TODO reserve a space menu and confirmation - QUERY WILL NEED MADE IN JDBC
+					} else if (anotherChoice.equalsIgnoreCase("R")) {
+						menu.spaceMenu(); //returns to space menu
+					}
 		}
-	
-
+	}
+}
 	private void listVenues(List<Venue> venues) {
 		for (Venue venue : venues) {
 			System.out.println(venue.getVenueId() + ") " + venue.getVenueName());
@@ -80,19 +108,33 @@ public class ExcelsiorCLI {
 	}
 
 	private void showAllVenues() {
-		List<Venue> venues = venueDao.getAllVenues();
+	    venues = venueDao.getAllVenues();
 		listVenues(venues);
 	}
 
 	private void listVenueDetails(List<Venue> venueDetails) {
 		for (Venue venueDetailsList : venueDetails) {
-			System.out.println(venueDetailsList.getVenueName() + venueDetailsList.getCityName()
-					+ venueDetailsList.getStateName() + venueDetailsList.getVenueDescription());
+			System.out.println("Venue Name: " + venueDetailsList.getVenueName() + " | Location: " + venueDetailsList.getCityName() + ", "
+					+ venueDetailsList.getStateName() + " | Description: " + venueDetailsList.getVenueDescription());
 		}
 	}
 
 	private void showAllVenueDetails() {
-		List<Venue> venueStuff = venueDao.getAllVenues();
-		listVenueDetails(venueStuff);
+		venues = venueDao.getAllVenues();
+		listVenueDetails(venues);
 	}
+	
+	private void listSpaces(List<Space> spaces) {
+		for (Space space : spaces) {
+			System.out.println(space.getSpaceId() + ") " + space.getSpaceName() + " " + space.getOpenFrom() + " " + space.getOpenTo() + " " 
+					+ space.getDailyRate() + " " + space.getMaxOccupancy());
+		//TODO if statement that changes the open from and to ints to month strings
+		}
+	}
+	
+	private void showAllSpaces() {
+		spaces = spaceDao.getAllSpaces();
+		listSpaces(spaces);
+	}
+	
 }
