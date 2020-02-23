@@ -11,13 +11,11 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.techelevator.reservation.JDBCReservationDAO;
 import com.techelevator.reservation.Reservation;
 import com.techelevator.reservation.ReservationDAO;
-import com.techelevator.state.State;
 
 public class JDBCReservationDAOIntegrationTest {
 	
 	private ReservationDAO dao;
 	private JdbcTemplate jdbcTemplate;
-	private int reservationId;
 	private static final String TEST_RESERVATION = "Fake Reservation";
 	
 	private static SingleConnectionDataSource dataSource;
@@ -48,7 +46,7 @@ public class JDBCReservationDAOIntegrationTest {
 		
 		SqlRowSet rows = jdbcTemplate.queryForRowSet(sql);
 		rows.next();
-		reservationId = rows.getInt("reservation_id");
+		int reservationId = rows.getInt("reservation_id");
 		
 		dao = new JDBCReservationDAO(dataSource);
 	}

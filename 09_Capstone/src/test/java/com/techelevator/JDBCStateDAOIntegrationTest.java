@@ -3,7 +3,6 @@ package com.techelevator;
 import java.sql.SQLException;
 
 import org.junit.*;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import com.techelevator.state.JDBCStateDAO;
@@ -13,7 +12,6 @@ import com.techelevator.state.StateDAO;
 public class JDBCStateDAOIntegrationTest {
 	
 	private StateDAO dao;
-	private JdbcTemplate jdbcTemplate;
 	private static SingleConnectionDataSource dataSource;
 
 	@BeforeClass
@@ -38,7 +36,6 @@ public class JDBCStateDAOIntegrationTest {
 	@Before
 	public void setup() {
 		dao = new JDBCStateDAO(dataSource);
-		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
 	@Test
